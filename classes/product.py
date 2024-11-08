@@ -20,7 +20,7 @@ class Product:
         self.quantity = quantity
         self.active = True
 
-    def get_quantity(self) -> float:
+    def get_quantity(self) -> int:
         """
         Returns the current available quantity
         """
