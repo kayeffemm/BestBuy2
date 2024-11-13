@@ -18,14 +18,14 @@ def test_create_product_negative_price():
 
 def test_deactivate_when_zero_quantity():
     test_product = Product("Test", 1499.99, 20)
-    test_product.set_quantity(0)
+    test_product.quantity = 0
     assert test_product.is_active() == False
 
 
 def test_update_quantity_after_buy():
     test_product = Product("Test", 1499.99, 20)
     test_product.buy(10)
-    assert test_product.get_quantity() == 10
+    assert test_product.quantity == 10
 
 
 def test_exception_when_quantity_not_sufficient():

@@ -15,18 +15,20 @@ class Product:
             raise ValueError(f"Only positive numbers are accepted for quantity")
 
         # initialize instance variables
-        self.name = name
-        self.price = price
-        self.quantity = quantity
-        self.active = True
+        self._name = name
+        self._price = price
+        self._quantity = quantity
+        self._active = True
 
-    def get_quantity(self) -> int:
+    @property
+    def quantity(self) -> int:
         """
         Returns the current available quantity
         """
-        return self.quantity
+        return self._quantity
 
-    def set_quantity(self, quantity: int) -> None:
+    @quantity.setter
+    def quantity(self, quantity: int) -> None:
         """
         sets instance variable self.quantity equal to quantity
         """
@@ -35,7 +37,7 @@ class Product:
         if quantity < 0:
             raise ValueError(f"Only positive numbers are accepted for quantity")
 
-        self.quantity = quantity
+        self._quantity = quantity
         if quantity == 0:
             self.deactivate()
 
@@ -44,26 +46,26 @@ class Product:
         """
         returns True if product is active or False if product is not.
         """
-        return self.active
+        return self._active
 
     def activate(self) -> None:
         """
         Activates the product
         """
-        self.active = True
+        self._active = True
 
     def deactivate(self) -> None:
         """
         deactivates the Product
         """
-        self.active = False
+        self._active = False
 
     def show(self) -> str:
         """
         Returns a string, which describes the product.
         :return: f-string which holds product information
         """
-        return f"{self.name}, Price: {self.price}, Stock: {self.quantity}"
+        return f"{self._name}, Price: {self._price}, Stock: {self._quantity}"
 
     def buy(self, quantity: int) -> float:
         """
@@ -76,11 +78,16 @@ class Product:
             raise TypeError(f"quantity must be integer, got {type(quantity).__name__}.")
         if quantity < 0:
             raise ValueError(f"Only positive numbers are accepted for quantity")
-        if not self.active:
-            raise TypeError(f"Product {self.name} is not currently active.")
+        if not self._active:
+            raise TypeError(f"Product {self._name} is not currently active.")
         if quantity > self.quantity:
-            raise ValueError(f"Can't buy {quantity} items, current stock only holds: {self.quantity} items.")
+            raise ValueError(f"Can't buy {quantity} items, current stock only holds: {self._quantity} items.")
 
-        total_price = quantity * self.price
-        self.set_quantity(self.quantity - quantity)
+        total_price = quantity * self._price
+        self._quantity = self._quantity - quantity
         return total_price
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name: str, price: float):
+        super().__init__(name, price, quantity=0)
