@@ -1,4 +1,4 @@
-from classes.product import Product
+from classes.product import Product, NonStockedProduct, LimitedProduct
 
 
 class Store:
@@ -37,7 +37,7 @@ class Store:
         """
         Returns how many individual items the store currently has in stock.
         """
-        return sum(product.get_quantity() for product in self.products)
+        return sum(product.quantity for product in self.products)
 
     def get_all_products(self) -> list[Product]:
         """
@@ -58,7 +58,7 @@ class Store:
                 raise TypeError(f"Expected instance of Product class, got {type(product).__name__}.")
             if not product.is_active():
                 raise ValueError(f"{product.name} is currently inactive.")
-            if quantity > product.quantity:
+            if type(product) == Product and quantity > product.quantity:
                 raise ValueError(f"Order quantity exceed store stock for product: {product.name}.")
 
         total_price = 0
