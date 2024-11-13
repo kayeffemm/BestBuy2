@@ -1,5 +1,3 @@
-from itertools import product
-
 from classes.product import Product
 from classes.store import Store
 
