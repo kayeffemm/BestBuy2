@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from classes.product import Product
-
 
 class Promotion(ABC):
     def __init__(self, name: str) -> None:
@@ -15,12 +13,12 @@ class Promotion(ABC):
         return self._name
 
     @abstractmethod
-    def apply_promotion(self, product: Product, quantity: int) -> float:
+    def apply_promotion(self, product, quantity: int) -> float:
         pass
 
 
 class SecondHalfPrice(Promotion):
-    def apply_promotion(self, product: Product, quantity: int) -> float:
+    def apply_promotion(self, product, quantity: int) -> float:
         """
         Every second item is only half the price.
         :param product: Takes an Object of the Product class.
@@ -34,7 +32,7 @@ class SecondHalfPrice(Promotion):
 
 
 class ThirdOneFree(Promotion):
-    def apply_promotion(self, product: Product, quantity: int) -> float:
+    def apply_promotion(self, product, quantity: int) -> float:
         """
         Every third product ist free.
         :param product: Takes an object of the Product class.
@@ -57,7 +55,7 @@ class PercentDiscount(Promotion):
             raise ValueError(f"Percent can't be less than zero")
         self._percent = percent
 
-    def apply_promotion(self, product: Product, quantity: int) -> float:
+    def apply_promotion(self, product, quantity: int) -> float:
         """
         Apply a percentage discount equal to self._percent
         :param product: Takes an object of the Product class.
