@@ -1,6 +1,6 @@
 from classes.product import Product, NonStockedProduct, LimitedProduct
 from classes.store import Store
-from classes.promotion import Promotion, SecondHalfPrice, ThirdOneFree, PercentDiscount
+from classes.promotion import SecondHalfPrice, ThirdOneFree, PercentDiscount
 
 def main():
     """
@@ -129,7 +129,7 @@ def print_shopping_cart(shopping_cart: list[tuple]) -> None:
 
 def ask_for_item_and_quantity(store_items_amount: int) -> tuple:
     """
-    Calls another function to verify user input and returns a index and quantity as a tuple of integers
+    Calls another function to verify user input and returns an index and quantity as a tuple of integers
     """
     while True:
         index = string_to_int("Which product # do you want? ")

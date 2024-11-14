@@ -1,5 +1,3 @@
-from classes.promotion import Promotion, SecondHalfPrice, ThirdOneFree, PercentDiscount
-
 class Product:
     def __init__(self, name: str, price: float, quantity: int, promotion = None) -> None:
         # Check valid inputs

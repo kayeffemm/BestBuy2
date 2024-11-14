@@ -1,4 +1,4 @@
-from classes.product import Product, NonStockedProduct, LimitedProduct
+from classes.product import Product
 
 
 class Store:
