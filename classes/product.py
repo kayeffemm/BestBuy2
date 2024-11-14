@@ -1,5 +1,7 @@
+from classes.promotion import Promotion, SecondHalfPrice, ThirdOneFree, PercentDiscount
+
 class Product:
-    def __init__(self, name: str, price: float, quantity: int) -> None:
+    def __init__(self, name: str, price: float, quantity: int, promotion = None) -> None:
         # Check valid inputs
         if not isinstance(name, str):
             raise TypeError(f"name must be string, got {type(name).__name__}.")
@@ -19,6 +21,7 @@ class Product:
         self.price = price
         self._quantity = quantity
         self._active = True
+        self._promotion = promotion
 
     @property
     def quantity(self) -> int:
@@ -65,7 +68,19 @@ class Product:
         Returns a string, which describes the product.
         :return: f-string which holds product information
         """
-        return f"{self.name}, Price: {self.price}, Stock: {self.quantity}"
+        return f"{self.name}, Price: {self.price}, Stock: {self.quantity}, Promotion: {self._promotion}"
+
+    def get_promotion(self):
+        """
+        Shows the current promotion
+        """
+        return self._promotion
+
+    def set_promotion(self, promotion):
+        """
+        Allows us to set a single promotion for our object.
+        """
+        self._promotion = promotion
 
     def buy(self, quantity: int) -> float:
         """
@@ -83,8 +98,13 @@ class Product:
         if quantity > self._quantity:
             raise ValueError(f"Can't buy {quantity} items, current stock only holds: {self._quantity} items.")
 
-        total_price = quantity * self.price
-        self.quantity = self._quantity - quantity
+        if self._promotion is None:
+            total_price = self.price * quantity
+        else:
+            total_price = self._promotion.apply_promotion(self, quantity)
+
+        self._quantity -= quantity
+
         return total_price
 
 
@@ -106,7 +126,11 @@ class NonStockedProduct(Product):
         if not self._active:
             raise TypeError(f"Product {self.name} is not currently active.")
 
-        total_price = quantity * self.price
+        if self._promotion is None:
+            total_price = self.price * quantity
+        else:
+            total_price = self._promotion.apply_promotion(self, quantity)
+
         return total_price
 
     def show(self) -> str:
@@ -114,7 +138,7 @@ class NonStockedProduct(Product):
         Returns a string, which describes the product.
         :return: f-string which holds product information
         """
-        return f"{self.name}, Price: {self.price}"
+        return f"{self.name}, Price: {self.price}, Promotion: {self._promotion}"
 
 
 class LimitedProduct(Product):
@@ -159,7 +183,13 @@ class LimitedProduct(Product):
         if quantity > self._maximum:
             raise ValueError(f"Can't buy {quantity} items, you're only allowed to purchase {self._maximum} items.")
 
-        total_price = quantity * self.price
+        if self._promotion is None:
+            total_price = self.price * quantity
+        else:
+            total_price = self._promotion.apply_promotion(self, quantity)
+
+        self._quantity -= quantity
+
         return total_price
 
     def show(self) -> str:
@@ -167,4 +197,4 @@ class LimitedProduct(Product):
         Returns a string, which describes the product.
         :return: f-string which holds product information
         """
-        return f"{self.name}, Price: {self.price}, Limited to {self._maximum} per order!"
+        return f"{self.name}, Price: {self.price}, Limited to {self._maximum} per order! Promotion: {self._promotion}"
